@@ -1,0 +1,76 @@
+version: '3.8'
+
+# Docker Compose untuk Dokploy Deployment
+# Copy file ini ke Dokploy sebagai sitespark-docker-compose.yml
+
+services:
+  # Backend API (Go + Gin)
+  sitespark-backend:
+    build:
+      context: ./apps/backend-go
+      dockerfile: Dockerfile.dokploy
+    container_name: sitespark-backend
+    restart: unless-stopped
+    environment:
+      # Server
+      SERVER_PORT: 3000
+      SERVER_ENV: production
+      SERVER_ALLOW_ORIGINS: "${SITESPARK_DOMAIN:-http://localhost}"
+      
+      # Database (gunakan Dokploy PostgreSQL)
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT:-5432}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB:-sitespark_db}
+      DB_SSLMODE: require
+      
+      # Redis (gunakan Dokploy Redis)
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DB: 0
+      
+      # JWT
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: 24h
+      
+      # Kimi AI
+      KIMI_API_KEY: ${KIMI_API_KEY}
+      KIMI_BASE_URL: https://api.kimi.com/coding
+      
+      # Logging
+      LOG_LEVEL: info
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - dokploy-network
+
+  # Frontend (React + Nginx)
+  sitespark-frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: "${SITESPARK_API_URL:-/api}"
+        VITE_SOCKET_URL: "${SITESPARK_API_URL:-/api}"
+    container_name: sitespark-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      sitespark-backend:
+        condition: service_healthy
+    networks:
+      - dokploy-network
+
+networks:
+  dokploy-network:
+    external: true
+    name: dokploy-network
