@@ -49,10 +49,10 @@ func main() {
 		logrus.WithError(err).Fatal("Failed to connect to database")
 	}
 
-	// Run migrations
-	if err := db.Migrate(); err != nil {
-		logrus.WithError(err).Fatal("Failed to run migrations")
-	}
+	// Run migrations (skip for existing DB)
+	// if err := db.Migrate(); err != nil {
+	// 	logrus.WithError(err).Fatal("Failed to run migrations")
+	// }
 
 	// Initialize utilities
 	jwtUtil := utils.NewJWTUtil(&cfg.JWT)
@@ -68,6 +68,7 @@ func main() {
 	websiteHandler := handlers.NewWebsiteHandler(db, websiteGen)
 	aiHandler := handlers.NewAIHandler(db, kimiClient, websiteGen)
 	tokenHandler := handlers.NewTokenHandler(db, tokenMgr)
+	deployHandler := handlers.NewDeployHandler(db)
 
 	// Setup router
 	r := gin.New()
@@ -137,6 +138,14 @@ func main() {
 			tokens.GET("/balance", tokenHandler.GetBalance)
 			tokens.GET("/transactions", tokenHandler.GetTransactions)
 			tokens.POST("/daily", tokenHandler.ClaimDailyBonus)
+		}
+
+		// Deploy routes (protected)
+		deploy := api.Group("/deploy")
+		deploy.Use(middleware.AuthMiddleware(jwtUtil))
+		{
+			deploy.POST("", deployHandler.Deploy)
+			deploy.GET("/list", deployHandler.GetDeployments)
 		}
 	}
 

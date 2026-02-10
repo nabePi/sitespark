@@ -29,7 +29,10 @@ export const useWebsiteStore = create<WebsiteState>()((set, get) => ({
     set({ isLoading: true, error: null })
     try {
       const response = await websiteApi.list()
-      set({ websites: response.data.data!, isLoading: false })
+      const data = response.data.data
+      // API returns { websites: Website[] }
+      const websites = Array.isArray(data) ? data : (data as any)?.websites || []
+      set({ websites, isLoading: false })
     } catch (error) {
       set({ error: 'Failed to fetch websites', isLoading: false })
     }

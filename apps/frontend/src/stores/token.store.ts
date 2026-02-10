@@ -39,7 +39,10 @@ export const useTokenStore = create<TokenState>()((set, get) => ({
     set({ isLoading: true })
     try {
       const response = await tokenApi.getTransactions()
-      set({ transactions: response.data.data!, isLoading: false })
+      const data = response.data.data
+      // API returns { transactions: [...], total, limit, offset }
+      const transactions = (data as any)?.transactions || []
+      set({ transactions, isLoading: false })
     } catch (error) {
       set({ error: 'Failed to fetch transactions', isLoading: false })
     }

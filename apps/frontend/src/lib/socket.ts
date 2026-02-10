@@ -1,67 +1,39 @@
-import { io, Socket } from 'socket.io-client'
 import type { ChatMessage } from '@/types'
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:4000'
+// Socket.IO disabled - backend Go doesn't have Socket.IO implemented
+// Using HTTP API for chat instead
 
 class SocketClient {
-  private socket: Socket | null = null
   private messageCallbacks: ((message: ChatMessage) => void)[] = []
   private typingCallbacks: ((isTyping: boolean) => void)[] = []
   private connectCallbacks: (() => void)[] = []
   private disconnectCallbacks: (() => void)[] = []
 
   connect() {
-    const token = localStorage.getItem('token')
-    
-    this.socket = io(SOCKET_URL, {
-      auth: { token },
-      transports: ['websocket'],
-    })
-
-    this.socket.on('connect', () => {
-      console.log('Socket connected')
-      this.connectCallbacks.forEach(cb => cb())
-    })
-
-    this.socket.on('disconnect', () => {
-      console.log('Socket disconnected')
-      this.disconnectCallbacks.forEach(cb => cb())
-    })
-
-    this.socket.on('message', (message: ChatMessage) => {
-      this.messageCallbacks.forEach(cb => cb(message))
-    })
-
-    this.socket.on('typing', (isTyping: boolean) => {
-      this.typingCallbacks.forEach(cb => cb(isTyping))
-    })
-
-    this.socket.on('error', (error: Error) => {
-      console.error('Socket error:', error)
-    })
-
+    // Socket.IO disabled - backend not implemented
+    console.log('Socket.IO disabled - using HTTP API')
     return this
   }
 
   disconnect() {
-    this.socket?.disconnect()
-    this.socket = null
+    // No-op
   }
 
-  sendMessage(content: string, websiteId?: string) {
-    this.socket?.emit('message', { content, websiteId })
+  sendMessage(_content: string, _websiteId?: string) {
+    // Use HTTP API instead
+    console.log('Use sendMessage API instead')
   }
 
-  sendTyping(isTyping: boolean) {
-    this.socket?.emit('typing', isTyping)
+  sendTyping(_isTyping: boolean) {
+    // Use HTTP API instead
   }
 
-  joinWebsite(websiteId: string) {
-    this.socket?.emit('join-website', websiteId)
+  joinWebsite(_websiteId: string) {
+    // No-op
   }
 
-  leaveWebsite(websiteId: string) {
-    this.socket?.emit('leave-website', websiteId)
+  leaveWebsite(_websiteId: string) {
+    // No-op
   }
 
   onMessage(callback: (message: ChatMessage) => void) {
@@ -79,6 +51,8 @@ class SocketClient {
   }
 
   onConnect(callback: () => void) {
+    // Call immediately since no actual connection
+    callback()
     this.connectCallbacks.push(callback)
     return () => {
       this.connectCallbacks = this.connectCallbacks.filter(cb => cb !== callback)
@@ -93,7 +67,7 @@ class SocketClient {
   }
 
   isConnected() {
-    return this.socket?.connected ?? false
+    return true // Always return true to not block UI
   }
 }
 

@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 import type { ApiResponse } from '@/types'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
+const API_BASE_URL = 'http://localhost:3001/api'
 
 class ApiClient {
   private client: AxiosInstance
@@ -70,9 +70,9 @@ export const api = new ApiClient()
 // API endpoints
 export const authApi = {
   login: (email: string, password: string) => 
-    api.post<{ user: import('@/types').User; token: string }>('/auth/login', { email, password }),
+    api.post<{ user: import('@/types').User; accessToken: string }>('/auth/login', { email, password }),
   register: (name: string, email: string, password: string) =>
-    api.post<{ user: import('@/types').User; token: string }>('/auth/register', { name, email, password }),
+    api.post<{ user: import('@/types').User; accessToken: string }>('/auth/register', { name, email, password }),
   logout: () => api.post('/auth/logout'),
   me: () => api.get<import('@/types').User>('/auth/me'),
 }

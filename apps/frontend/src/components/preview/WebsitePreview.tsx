@@ -27,7 +27,7 @@ export function WebsitePreview({ website }: WebsitePreviewProps) {
   }
 
   const previewUrl = website?.url || website?.id 
-    ? `http://localhost:4000/preview/${website?.id || 'demo'}`
+    ? `http://localhost:3001/preview/${website?.id || 'demo'}`
     : null
 
   return (
