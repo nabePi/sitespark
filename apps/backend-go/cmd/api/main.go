@@ -49,10 +49,10 @@ func main() {
 		logrus.WithError(err).Fatal("Failed to connect to database")
 	}
 
-	// Run migrations (skip for existing DB)
-	// if err := db.Migrate(); err != nil {
-	// 	logrus.WithError(err).Fatal("Failed to run migrations")
-	// }
+	// Run migrations
+	if err := db.Migrate(); err != nil {
+		logrus.WithError(err).Fatal("Failed to run migrations")
+	}
 
 	// Initialize utilities
 	jwtUtil := utils.NewJWTUtil(&cfg.JWT)
