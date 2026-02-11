@@ -1,0 +1,46 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e5]:
+    - link "Back to home" [ref=e6] [cursor=pointer]:
+      - /url: /
+      - img [ref=e7]
+      - text: Back to home
+    - generic [ref=e9]:
+      - heading "Welcome back" [level=1] [ref=e10]
+      - paragraph [ref=e11]: Sign in to your account to continue building
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - text: Email
+        - generic [ref=e14]:
+          - img [ref=e15]
+          - textbox "you@example.com" [ref=e18]
+      - generic [ref=e19]:
+        - text: Password
+        - generic [ref=e20]:
+          - img [ref=e21]
+          - textbox "••••••••" [ref=e24]
+          - button [ref=e25] [cursor=pointer]:
+            - img [ref=e26]
+      - generic [ref=e29]:
+        - generic [ref=e30] [cursor=pointer]:
+          - checkbox "Remember me" [ref=e31]
+          - generic [ref=e32]: Remember me
+        - link "Forgot password?" [ref=e33] [cursor=pointer]:
+          - /url: /forgot-password
+      - button "Sign In" [ref=e34] [cursor=pointer]:
+        - generic [ref=e35]:
+          - text: Sign In
+          - img [ref=e36]
+    - paragraph [ref=e38]:
+      - text: Don't have an account?
+      - link "Sign up" [ref=e39] [cursor=pointer]:
+        - /url: /register
+  - generic [ref=e43]:
+    - img [ref=e45]
+    - blockquote [ref=e47]: "\"SiteSpark helped me launch my business website in just 5 minutes. Absolutely incredible!\""
+    - generic [ref=e50]:
+      - paragraph [ref=e51]: Sarah Johnson
+      - paragraph [ref=e52]: Founder, TechStart
+```
