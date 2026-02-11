@@ -25,6 +25,7 @@ export function useChat(websiteId?: string) {
   const messageInterval = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
+    console.log('[useChat] Initializing chat connection for website:', websiteId)
     socket.connect()
     loadChatHistory(websiteId)
 
@@ -33,18 +34,19 @@ export function useChat(websiteId?: string) {
     }
 
     const unsubscribeMessage = socket.onMessage((message: ChatMessage) => {
+      console.log('[useChat] Received message:', message)
       if (message.role === 'assistant') {
         // Handle streaming effect for assistant messages
         streamingContent.current = message.content
         let currentIndex = 0
         const words = message.content.split(' ')
-        
+
         // Add empty message first
         addMessage({
           ...message,
           content: '',
         })
-        
+
         // Stream words
         messageInterval.current = setInterval(() => {
           if (currentIndex < words.length) {
@@ -62,13 +64,24 @@ export function useChat(websiteId?: string) {
       }
     })
 
-    const unsubscribeTyping = socket.onTyping((typing: boolean) => {
-      setTyping(typing)
+    const unsubscribeTyping = socket.onTyping(({ isTyping }: { userId: string; isTyping: boolean }) => {
+      setTyping(isTyping)
+    })
+
+    const unsubscribeConnect = socket.onConnect(() => {
+      console.log('[useChat] Socket connected')
+    })
+
+    const unsubscribeDisconnect = socket.onDisconnect(() => {
+      console.log('[useChat] Socket disconnected')
     })
 
     return () => {
+      console.log('[useChat] Cleaning up chat connection')
       unsubscribeMessage()
       unsubscribeTyping()
+      unsubscribeConnect()
+      unsubscribeDisconnect()
       if (websiteId) {
         socket.leaveWebsite(websiteId)
       }
@@ -76,7 +89,8 @@ export function useChat(websiteId?: string) {
         clearInterval(messageInterval.current)
       }
     }
-  }, [websiteId, addMessage, setTyping, loadChatHistory, updateLastMessage])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [websiteId])
 
   const sendMessage = useCallback((content: string) => {
     if (!content.trim()) return
