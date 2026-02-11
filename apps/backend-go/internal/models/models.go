@@ -56,6 +56,17 @@ type TokenTransaction struct {
 	CreatedAt        time.Time  `json:"createdAt"`
 }
 
+// ChatMessage represents a chat message between user and AI
+type ChatMessage struct {
+	ID        uuid.UUID  `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
+	UserID    uuid.UUID  `gorm:"type:uuid;index;not null" json:"userId"`
+	User      User       `json:"user,omitempty"`
+	WebsiteID *uuid.UUID `gorm:"type:uuid;index" json:"websiteId"`
+	Role      string     `gorm:"not null" json:"role"` // 'user' | 'assistant' | 'system'
+	Content   string     `gorm:"type:text;not null" json:"content"`
+	CreatedAt time.Time  `json:"createdAt"`
+}
+
 // BeforeCreate hook to generate UUID
 func (u *User) BeforeCreate(tx *gorm.DB) error {
 	if u.ID == uuid.Nil {
@@ -74,6 +85,13 @@ func (w *Website) BeforeCreate(tx *gorm.DB) error {
 func (t *TokenTransaction) BeforeCreate(tx *gorm.DB) error {
 	if t.ID == uuid.Nil {
 		t.ID = uuid.New()
+	}
+	return nil
+}
+
+func (c *ChatMessage) BeforeCreate(tx *gorm.DB) error {
+	if c.ID == uuid.Nil {
+		c.ID = uuid.New()
 	}
 	return nil
 }

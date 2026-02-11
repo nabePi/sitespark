@@ -16,6 +16,7 @@ import (
 	"backend-go/internal/services/token"
 	"backend-go/internal/services/website"
 	"backend-go/internal/utils"
+	"backend-go/internal/websocket"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -62,6 +63,10 @@ func main() {
 	kimiClient := ai.NewKimiClient(&cfg.Kimi)
 	websiteGen := website.NewGenerator(db, kimiClient, tokenMgr)
 
+	// Initialize WebSocket manager
+	wsManager := websocket.NewManager()
+	go wsManager.Run()
+
 	// Initialize handlers
 	authHandler := handlers.NewAuthHandler(db, jwtUtil, tokenMgr)
 	userHandler := handlers.NewUserHandler(db)
@@ -69,12 +74,16 @@ func main() {
 	aiHandler := handlers.NewAIHandler(db, kimiClient, websiteGen)
 	tokenHandler := handlers.NewTokenHandler(db, tokenMgr)
 	deployHandler := handlers.NewDeployHandler(db)
+	wsHandler := handlers.NewWebSocketHandler(wsManager, jwtUtil, db, kimiClient)
 
 	// Setup router
 	r := gin.New()
 	r.Use(middleware.ErrorMiddleware())
 	r.Use(middleware.LoggerMiddleware())
 	r.Use(middleware.CORSMiddleware(&cfg.Server))
+
+	// WebSocket endpoint
+	r.GET("/ws", wsHandler.HandleWebSocket)
 
 	// Health check
 	r.GET("/health", func(c *gin.Context) {

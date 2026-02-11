@@ -78,3 +78,8 @@ func (d *Database) Close() error {
 	}
 	return sqlDB.Close()
 }
+
+// GetDB returns the underlying gorm.DB instance
+func (d *Database) GetDB() *gorm.DB {
+	return d.DB
+}
