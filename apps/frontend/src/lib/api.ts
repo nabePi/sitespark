@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 import type { ApiResponse } from '@/types'
 
-const API_BASE_URL = 'http://localhost:3001/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 
 class ApiClient {
   private client: AxiosInstance
@@ -31,11 +31,17 @@ class ApiClient {
       (error) => Promise.reject(error)
     )
 
-    // Response interceptor
+    // Response interceptor - log and handle auth errors
     this.client.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        // Log successful responses for debugging
+        console.log('[API]', response.config.method?.toUpperCase(), response.config.url, '- Status:', response.status)
+        return response
+      },
       (error: AxiosError<ApiResponse<unknown>>) => {
-        if (error.response?.status === 401) {
+        console.error('API Error:', error.response?.data || error.message)
+        // Only redirect if 401 and not already on login page (avoid clearing login error messages)
+        if (error.response?.status === 401 && !window.location.pathname.includes('/login')) {
           localStorage.removeItem('token')
           window.location.href = '/login'
         }

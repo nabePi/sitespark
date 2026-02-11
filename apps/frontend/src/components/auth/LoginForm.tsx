@@ -33,10 +33,21 @@ export function LoginForm() {
   const onSubmit = async (data: LoginForm) => {
     try {
       setError('')
+      console.log('[LoginForm] Starting login for:', data.email)
+
       await login(data.email, data.password)
-      navigate('/dashboard')
-    } catch {
-      setError('Invalid email or password')
+
+      console.log('[LoginForm] Login action completed')
+
+      // Add a small delay to ensure state is updated
+      await new Promise(resolve => setTimeout(resolve, 100))
+
+      console.log('[LoginForm] Navigating to dashboard...')
+      navigate('/dashboard', { replace: true })
+    } catch (err: any) {
+      console.error('[LoginForm] Login error:', err)
+      const errorMessage = err?.response?.data?.error?.message || err?.message || 'Invalid email or password'
+      setError(errorMessage)
     }
   }
 

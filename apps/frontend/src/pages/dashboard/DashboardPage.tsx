@@ -24,7 +24,8 @@ export function DashboardPage() {
   useEffect(() => {
     fetchBalance()
     fetchWebsites()
-  }, [fetchBalance, fetchWebsites])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const recentWebsites = websites.slice(0, 5)
 

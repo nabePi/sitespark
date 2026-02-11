@@ -30,10 +30,13 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true })
         try {
           const response = await authApi.login(email, password)
+          console.log('[AuthStore] Login response:', response.data)
           const { user, accessToken } = response.data.data!
           localStorage.setItem('token', accessToken)
           set({ user, token: accessToken, isAuthenticated: true, isLoading: false })
+          console.log('[AuthStore] Login successful, user:', user.email)
         } catch (error) {
+          console.error('[AuthStore] Login failed:', error)
           set({ isLoading: false })
           throw error
         }
@@ -43,10 +46,12 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true })
         try {
           const response = await authApi.register(name, email, password)
+          console.log('[AuthStore] Register response:', response.data)
           const { user, accessToken } = response.data.data!
           localStorage.setItem('token', accessToken)
           set({ user, token: accessToken, isAuthenticated: true, isLoading: false })
         } catch (error) {
+          console.error('[AuthStore] Register failed:', error)
           set({ isLoading: false })
           throw error
         }
