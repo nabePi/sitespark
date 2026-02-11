@@ -51,15 +51,15 @@ services:
       DB_USER: sitespark
       DB_PASSWORD: sitespark_password
       DB_NAME: sitespark_db
-      DB_SSL_MODE: disable
+      DB_SSLMODE: disable
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: sitespark_redis_pass
       JWT_SECRET: ${JWT_SECRET:-sitespark_jwt_secret_change_in_production}
-      JWT_EXPIRES: 24h
+      JWT_EXPIRES_IN: 24h
       KIMI_API_KEY: ${KIMI_API_KEY:-demo_key}
       KIMI_BASE_URL: https://api.kimi.com/coding
-      CORS_ORIGIN: http://localhost:3000
+      CORS_ORIGIN: "*"
       LOG_LEVEL: info
     ports:
       - "3001:3001"
@@ -68,17 +68,23 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3001/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   # Frontend App
   frontend:
     build:
       context: ./apps/frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:3001/api
+        VITE_SOCKET_URL: ws://localhost:3001
     container_name: sitespark-frontend
     restart: unless-stopped
-    environment:
-      VITE_API_URL: http://localhost:3001
-      VITE_SOCKET_URL: http://localhost:3001
     ports:
       - "3002:80"
     depends_on:
