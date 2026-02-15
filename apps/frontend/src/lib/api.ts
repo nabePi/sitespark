@@ -100,14 +100,6 @@ export const tokenApi = {
     api.post('/tokens/purchase', { packageId, paymentMethod }),
 }
 
-export const blogApi = {
-  list: () => api.get<import('@/types').BlogPost[]>('/blogs'),
-  get: (id: string) => api.get<import('@/types').BlogPost>(`/blogs/${id}`),
-  create: (data: Partial<import('@/types').BlogPost>) => api.post<import('@/types').BlogPost>('/blogs', data),
-  update: (id: string, data: Partial<import('@/types').BlogPost>) => api.put<import('@/types').BlogPost>(`/blogs/${id}`, data),
-  delete: (id: string) => api.delete(`/blogs/${id}`),
-}
-
 export const formApi = {
   list: (websiteId: string) => api.get<import('@/types').Form[]>(`/websites/${websiteId}/forms`),
   get: (id: string) => api.get<import('@/types').Form>(`/forms/${id}`),

@@ -5,7 +5,6 @@ import {
   MessageSquare,
   Globe,
   Wallet,
-  FileText,
   FormInput,
   Settings,
   Sparkles,
@@ -17,7 +16,6 @@ const menuItems = [
   { path: '/chat', label: 'AI Builder', icon: MessageSquare },
   { path: '/websites', label: 'Websites', icon: Globe },
   { path: '/tokens', label: 'Tokens', icon: Wallet },
-  { path: '/blogs', label: 'Blog', icon: FileText },
   { path: '/forms', label: 'Forms', icon: FormInput },
 ]
 

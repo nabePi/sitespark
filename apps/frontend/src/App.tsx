@@ -12,8 +12,6 @@ import { ChatPage } from '@/pages/chat/ChatPage'
 import { WebsitesListPage } from '@/pages/websites/WebsitesListPage'
 import { PreviewPage } from '@/pages/websites/PreviewPage'
 import { TokenWalletPage } from '@/pages/tokens/TokenWalletPage'
-import { BlogListPage } from '@/pages/blogs/BlogListPage'
-import { BlogEditorPage } from '@/pages/blogs/BlogEditorPage'
 import { FormBuilderPage } from '@/pages/forms/FormBuilderPage'
 
 function App() {
@@ -38,9 +36,6 @@ function App() {
           <Route path="/websites" element={<WebsitesListPage />} />
           <Route path="/websites/:id/preview" element={<PreviewPage />} />
           <Route path="/tokens" element={<TokenWalletPage />} />
-          <Route path="/blogs" element={<BlogListPage />} />
-          <Route path="/blogs/new" element={<BlogEditorPage />} />
-          <Route path="/blogs/:id/edit" element={<BlogEditorPage />} />
           <Route path="/forms" element={<FormBuilderPage />} />
         </Route>
       </Route>

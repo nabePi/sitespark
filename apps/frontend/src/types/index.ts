@@ -72,20 +72,6 @@ export interface TokenPackage {
   bonus?: number
 }
 
-export interface BlogPost {
-  id: string
-  title: string
-  slug: string
-  excerpt?: string
-  content: string
-  coverImage?: string
-  status: 'draft' | 'published'
-  tags: string[]
-  publishedAt?: string
-  createdAt: string
-  updatedAt: string
-}
-
 export interface Form {
   id: string
   websiteId: string

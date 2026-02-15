@@ -223,46 +223,16 @@ export type TokenTransactionType =
   | 'blog_generation'
   | 'form_ai';
 
-export interface TokenPackage {
+// ============================================
+// Form Types
+// ============================================
+
+export interface FormSubmission {
   id: string;
   name: string;
   tokenAmount: number;
   priceIDR: number;
   bonusTokens: number;
-}
-
-// ============================================
-// Blog Types
-// ============================================
-
-export interface BlogPost {
-  id: string;
-  websiteId: string;
-  slug: string;
-  title: string;
-  excerpt: string | null;
-  content: BlogContent;
-  featuredImage: string | null;
-  status: 'draft' | 'published' | 'archived';
-  publishedAt: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface BlogContent {
-  blocks: ContentBlock[];
-}
-
-export interface ContentBlock {
-  type: 'paragraph' | 'heading' | 'image' | 'list' | 'quote';
-  content: any;
-}
-
-export interface CreateBlogRequest {
-  websiteId: string;
-  title: string;
-  content: BlogContent;
-  status?: 'draft' | 'published';
 }
 
 // ============================================
