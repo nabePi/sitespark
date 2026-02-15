@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { useWebsiteStore } from '@/stores/website.store'
 import type { Website } from '@/types'
 
@@ -16,11 +16,14 @@ export function useWebsites() {
     deployWebsite,
   } = useWebsiteStore()
 
+  const hasFetched = useRef(false)
+
   useEffect(() => {
-    if (websites.length === 0 && !isLoading) {
+    if (!hasFetched.current && !isLoading) {
+      hasFetched.current = true
       fetchWebsites()
     }
-  }, [websites.length, isLoading, fetchWebsites])
+  }, [isLoading, fetchWebsites])
 
   const selectWebsite = useCallback((website: Website | null) => {
     setCurrentWebsite(website)

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Send, Sparkles } from 'lucide-react'
+import { Send, Sparkles, Loader2 } from 'lucide-react'
 import { useChat } from '@/hooks/useChat'
 import { useWebsiteStore } from '@/stores/website.store'
 import { Button } from '@/components/ui/button'
@@ -42,7 +42,7 @@ function MessageBubble({ role, content }: MessageBubbleProps) {
 
       <div
         className={cn(
-          'rounded-2xl px-5 py-3 text-sm leading-relaxed',
+          'rounded-2xl px-5 py-3 text-sm leading-relaxed whitespace-pre-wrap',
           isUser
             ? 'bg-primary text-white rounded-br-md'
             : 'bg-white/80 backdrop-blur border border-white/50 rounded-bl-md'
@@ -92,7 +92,7 @@ interface ChatInterfaceProps {
 }
 
 export function ChatInterface({ websiteId }: ChatInterfaceProps) {
-  const { messages, isTyping, suggestions, sendMessage } = useChat(websiteId)
+  const { messages, isTyping, suggestions, workflow, isGenerating, sendMessage } = useChat(websiteId)
   const [input, setInput] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
   const { currentWebsite } = useWebsiteStore()
@@ -117,6 +117,19 @@ export function ChatInterface({ websiteId }: ChatInterfaceProps) {
     }
   }
 
+  // Get current step number for progress
+  const stepLabels: Record<string, string> = {
+    initial: 'Langkah 1 dari 6',
+    business_type: 'Langkah 1 dari 6',
+    business_name: 'Langkah 2 dari 6',
+    target_audience: 'Langkah 3 dari 6',
+    features: 'Langkah 4 dari 6',
+    style: 'Langkah 5 dari 6',
+    contact_info: 'Langkah 6 dari 6',
+    generating: 'Membuat Website...',
+    complete: 'Website Selesai!',
+  }
+
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)]">
       {/* Website Info */}
@@ -130,8 +143,8 @@ export function ChatInterface({ websiteId }: ChatInterfaceProps) {
               <p className="font-semibold text-slate-900">{currentWebsite.name}</p>
               <span className={`
                 px-2 py-0.5 rounded-full text-xs font-medium
-                ${currentWebsite.status === 'published' 
-                  ? 'bg-green-100 text-green-700' 
+                ${currentWebsite.status === 'published'
+                  ? 'bg-green-100 text-green-700'
                   : currentWebsite.status === 'building'
                   ? 'bg-yellow-100 text-yellow-700'
                   : 'bg-slate-100 text-slate-700'}
@@ -139,6 +152,32 @@ export function ChatInterface({ websiteId }: ChatInterfaceProps) {
                 {currentWebsite.status}
               </span>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Workflow Progress */}
+      {workflow.step !== 'initial' && workflow.step !== 'complete' && (
+        <div className="glass-card mb-4 p-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-medium text-slate-600">
+              {stepLabels[workflow.step] || workflow.step}
+            </span>
+            {isGenerating && (
+              <Loader2 className="w-4 h-4 text-primary animate-spin" />
+            )}
+          </div>
+          <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-primary to-cta"
+              initial={{ width: 0 }}
+              animate={{
+                width: workflow.step === 'generating'
+                  ? '100%'
+                  : `${((['business_type', 'business_name', 'target_audience', 'features', 'style', 'contact_info'].indexOf(workflow.step) + 1) / 6) * 100}%`
+              }}
+              transition={{ duration: 0.3 }}
+            />
           </div>
         </div>
       )}
@@ -153,19 +192,20 @@ export function ChatInterface({ websiteId }: ChatInterfaceProps) {
               content={message.content}
             />
           ))}
-          
+
           {isTyping && <TypingIndicator />}
         </div>
       </ScrollArea>
 
-      {/* Suggestions */}
-      {suggestions.length > 0 && !isTyping && messages.length < 3 && (
+      {/* Suggestions - Only show at the beginning */}
+      {suggestions.length > 0 && !isTyping && messages.length < 2 && (
         <div className="flex flex-wrap gap-2 mb-4">
           {suggestions.slice(0, 4).map((suggestion) => (
             <button
               key={suggestion}
               onClick={() => {
                 sendMessage(suggestion)
+                setInput('')
               }}
               className="px-4 py-2 rounded-full text-sm bg-white/60 hover:bg-white/90 border border-white/40 transition-colors"
             >
@@ -175,28 +215,43 @@ export function ChatInterface({ websiteId }: ChatInterfaceProps) {
         </div>
       )}
 
-      {/* Input */}
+      {/* Input - Disabled during generation */}
       <form onSubmit={handleSubmit} className="mt-4">
         <div className="glass-card p-2 flex items-end gap-2">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Describe the website you want to build..."
-            className="flex-1 min-h-[60px] max-h-[120px] border-0 bg-transparent focus-visible:ring-0 resize-none"
+            placeholder={
+              workflow.step === 'generating'
+                ? 'Website sedang dibuat...'
+                : workflow.step === 'complete'
+                ? 'Website sudah selesai!'
+                : 'Ketik jawaban Anda di sini...'
+            }
+            disabled={isGenerating || workflow.step === 'complete'}
+            className="flex-1 min-h-[60px] max-h-[120px] border-0 bg-transparent focus-visible:ring-0 resize-none disabled:opacity-50"
           />
-          
+
           <Button
             type="submit"
-            disabled={!input.trim()}
+            disabled={!input.trim() || isGenerating || workflow.step === 'complete'}
             size="icon"
             className="h-10 w-10 rounded-xl shrink-0"
           >
-            <Send className="w-4 h-4" />
+            {isGenerating ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Send className="w-4 h-4" />
+            )}
           </Button>
         </div>
         <p className="text-xs text-slate-400 mt-2 text-center">
-          Press Enter to send, Shift + Enter for new line
+          {workflow.step === 'generating'
+            ? 'AI sedang membuat website Anda...'
+            : workflow.step === 'complete'
+            ? 'Website telah berhasil dibuat!'
+            : 'Press Enter untuk mengirim, Shift + Enter untuk baris baru'}
         </p>
       </form>
     </div>

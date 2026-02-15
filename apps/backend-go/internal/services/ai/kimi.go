@@ -69,7 +69,7 @@ func (k *KimiClient) ChatCompletion(ctx context.Context, messages []Message, max
 			ID:      "demo-response",
 			Object:  "chat.completion",
 			Created: time.Now().Unix(),
-			Model:   "moonshot-v1-8k",
+			Model:   "gpt-4o",
 			Choices: []struct {
 				Index   int     `json:"index"`
 				Message Message `json:"message"`
@@ -101,7 +101,7 @@ func (k *KimiClient) ChatCompletion(ctx context.Context, messages []Message, max
 	}
 
 	reqBody := ChatRequest{
-		Model:       "moonshot-v1-8k",
+		Model:       "gpt-4o",
 		Messages:    messages,
 		Temperature: 0.7,
 		MaxTokens:   maxTokens,
@@ -145,7 +145,16 @@ func (k *KimiClient) ChatCompletion(ctx context.Context, messages []Message, max
 	return &chatResp, nil
 }
 
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func (k *KimiClient) GenerateWebsite(ctx context.Context, prompt, templateID string) (string, error) {
+	logrus.WithField("prompt", prompt).WithField("template", templateID).Info("Generating website")
+
 	systemPrompt := `You are a website generation assistant. Generate complete website content based on the user's requirements.
 Return ONLY valid JSON with this structure:
 {
@@ -171,6 +180,7 @@ Be creative and professional. Ensure all content is in the same language as the 
 
 	resp, err := k.ChatCompletion(ctx, messages, 4096)
 	if err != nil {
+		logrus.WithError(err).Error("ChatCompletion failed")
 		return "", err
 	}
 
@@ -178,6 +188,7 @@ Be creative and professional. Ensure all content is in the same language as the 
 		return "", fmt.Errorf("no response from AI")
 	}
 
+	logrus.WithField("content", resp.Choices[0].Message.Content[:min(len(resp.Choices[0].Message.Content), 200)]).Info("Website generated successfully")
 	return resp.Choices[0].Message.Content, nil
 }
 
@@ -234,7 +245,7 @@ func (k *KimiClient) ChatCompletionStream(ctx context.Context, messages []Messag
 	}
 
 	reqBody := ChatRequest{
-		Model:       "moonshot-v1-8k",
+		Model:       "gpt-4o",
 		Messages:    messages,
 		Temperature: 0.7,
 		MaxTokens:   2048,
@@ -246,7 +257,10 @@ func (k *KimiClient) ChatCompletionStream(ctx context.Context, messages []Messag
 		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", k.baseURL+"/chat/completions", bytes.NewBuffer(jsonBody))
+	url := k.baseURL + "/chat/completions"
+	logrus.WithField("url", url).WithField("body", string(jsonBody)).Info("Calling Kimi API")
+
+	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
 	}
@@ -262,8 +276,8 @@ func (k *KimiClient) ChatCompletionStream(ctx context.Context, messages []Messag
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		logrus.WithField("status", resp.StatusCode).WithField("body", string(body)).Error("Kimi API streaming error")
-		return fmt.Errorf("kimi API returned status %d", resp.StatusCode)
+		logrus.WithField("status", resp.StatusCode).WithField("url", url).WithField("body", string(body)).Error("Kimi API streaming error")
+		return fmt.Errorf("kimi API returned status %d: %s", resp.StatusCode, string(body))
 	}
 
 	// Read the SSE stream

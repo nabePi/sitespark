@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -74,9 +75,12 @@ func (h *WebSocketHandler) handleMessage(client *websocket.Client, msg websocket
 		h.handleWebsiteJoin(client, msg)
 	case websocket.MessageTypeWebsiteLeave:
 		h.handleWebsiteLeave(client, msg)
+	case "ping":
+		// Handle ping - no response needed, the connection stays alive
+		logrus.Debug("Received ping from client")
 	default:
-		// Unknown message type
-		h.sendError(client, "Unknown message type")
+		// Unknown message type - just log it, don't send error
+		logrus.WithField("type", msg.Type).Warn("Unknown message type received")
 	}
 }
 
@@ -139,7 +143,8 @@ func (h *WebSocketHandler) handleChatMessage(client *websocket.Client, msg webso
 
 	if err != nil {
 		logrus.WithError(err).Error("Failed to get AI streaming response")
-		h.sendError(client, "Failed to get AI response")
+		// Send more detailed error to help debugging
+		h.sendError(client, fmt.Sprintf("Failed to get AI response: %v", err))
 		return
 	}
 

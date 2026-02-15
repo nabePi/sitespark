@@ -1,13 +1,39 @@
 import { create } from 'zustand'
 import type { ChatMessage } from '@/types'
 
+export type WorkflowStep =
+  | 'initial'
+  | 'business_type'
+  | 'business_name'
+  | 'target_audience'
+  | 'features'
+  | 'style'
+  | 'contact_info'
+  | 'generating'
+  | 'complete'
+
+export interface WorkflowState {
+  step: WorkflowStep
+  data: {
+    businessType?: string
+    businessName?: string
+    targetAudience?: string
+    features?: string[]
+    style?: string
+    contactInfo?: string
+    colorPreference?: string
+  }
+}
+
 interface ChatState {
   messages: ChatMessage[]
   isTyping: boolean
   isLoading: boolean
   error: string | null
   suggestions: string[]
-  
+  workflow: WorkflowState
+  isGenerating: boolean
+
   // Actions
   addMessage: (message: ChatMessage) => void
   addUserMessage: (content: string) => void
@@ -19,16 +45,30 @@ interface ChatState {
   updateLastMessage: (content: string) => void
   setSuggestions: (suggestions: string[]) => void
   loadChatHistory: (websiteId?: string) => Promise<void>
+
+  // Workflow actions
+  setWorkflowStep: (step: WorkflowStep) => void
+  updateWorkflowData: (data: Partial<WorkflowState['data']>) => void
+  resetWorkflow: () => void
+  setGenerating: (isGenerating: boolean) => void
+  getWorkflowPrompt: () => string
 }
 
 const defaultSuggestions = [
-  'Buatkan website untuk coffee shop',
-  'Buatkan landing page produk digital',
-  'Buatkan portfolio designer',
-  'Buatkan website restoran',
-  'Tambahkan section testimonial',
-  'Ganti warna tema jadi biru',
+  'Saya ingin membuat website restoran',
+  'Saya ingin membuat portfolio designer',
+  'Saya ingin membuat website untuk coffee shop',
+  'Saya ingin membuat landing page produk',
 ]
+
+const getWelcomeMessage = () => `Halo! Saya AI Builder SiteSpark. 🚀
+
+Saya akan membantu Anda membuat website impian. Mari kita mulai dengan beberapa pertanyaan sederhana.
+
+**Langkah 1 dari 6: Jenis Bisnis**
+Apa jenis bisnis atau kegiatan yang ingin Anda promosikan?
+
+Contoh: Restoran, Coffee Shop, Portfolio Pribadi, Toko Online, Jasa Konsultasi, dll.`
 
 export const useChatStore = create<ChatState>()((set, get) => ({
   messages: [],
@@ -36,6 +76,11 @@ export const useChatStore = create<ChatState>()((set, get) => ({
   isLoading: false,
   error: null,
   suggestions: defaultSuggestions,
+  workflow: {
+    step: 'initial',
+    data: {}
+  },
+  isGenerating: false,
 
   addMessage: (message) => {
     set((state) => ({
@@ -77,15 +122,16 @@ export const useChatStore = create<ChatState>()((set, get) => ({
   },
 
   clearMessages: () => {
-    set({ messages: [], error: null })
+    set({ messages: [], error: null, workflow: { step: 'initial', data: {} } })
   },
 
   updateLastMessage: (content) => {
     set((state) => {
       const messages = [...state.messages]
-      const lastMessage = messages[messages.length - 1]
+      const lastIndex = messages.length - 1
+      const lastMessage = messages[lastIndex]
       if (lastMessage && lastMessage.role === 'assistant') {
-        lastMessage.content = content
+        messages[lastIndex] = { ...lastMessage, content }
       }
       return { messages }
     })
@@ -98,12 +144,10 @@ export const useChatStore = create<ChatState>()((set, get) => ({
   loadChatHistory: async (websiteId) => {
     set({ isLoading: true })
     try {
-      // In a real app, fetch from API
-      // For now, start with a welcome message
       const welcomeMessage: ChatMessage = {
         id: crypto.randomUUID(),
         role: 'assistant',
-        content: 'Halo! Saya AI Builder SiteSpark. Ceritakan website impian Anda, saya akan bantu buatkan dalam 1 menit! 🚀',
+        content: getWelcomeMessage(),
         timestamp: new Date().toISOString(),
       }
       set({ messages: [welcomeMessage], isLoading: false })
@@ -111,4 +155,52 @@ export const useChatStore = create<ChatState>()((set, get) => ({
       set({ error: 'Failed to load chat history', isLoading: false })
     }
   },
+
+  // Workflow actions
+  setWorkflowStep: (step) => {
+    set((state) => ({
+      workflow: { ...state.workflow, step }
+    }))
+  },
+
+  updateWorkflowData: (data) => {
+    set((state) => ({
+      workflow: {
+        ...state.workflow,
+        data: { ...state.workflow.data, ...data }
+      }
+    }))
+  },
+
+  resetWorkflow: () => {
+    set({ workflow: { step: 'initial', data: {} } })
+  },
+
+  setGenerating: (isGenerating) => {
+    set({ isGenerating })
+  },
+
+  getWorkflowPrompt: () => {
+    const { data } = get().workflow
+    const features = data.features?.join(', ') || ''
+
+    return `Buatkan website ${data.businessType || ''} dengan nama "${data.businessName || ''}".
+
+Target audiens: ${data.targetAudience || ''}
+
+Fitur yang diinginkan: ${features}
+
+Gaya desain: ${data.style || 'modern dan profesional'}
+
+Preferensi warna: ${data.colorPreference || 'sesuai brand'}
+
+Informasi kontak: ${data.contactInfo || 'akan ditambahkan nanti'}
+
+Buatkan website lengkap dengan:
+- Hero section yang menarik
+- About section
+- Services/Products section
+- Contact section
+- Footer dengan informasi lengkap`
+  }
 }))

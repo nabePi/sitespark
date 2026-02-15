@@ -57,8 +57,8 @@ services:
       REDIS_PASSWORD: sitespark_redis_pass
       JWT_SECRET: ${JWT_SECRET:-sitespark_jwt_secret_change_in_production}
       JWT_EXPIRES_IN: 24h
-      KIMI_API_KEY: ${KIMI_API_KEY:-demo_key}
-      KIMI_BASE_URL: https://api.kimi.com/coding
+      KIMI_API_KEY: ${KIMI_API_KEY:-}
+      KIMI_BASE_URL: ${KIMI_BASE_URL:-https://api.openai.com/v1}
       CORS_ORIGIN: "*"
       LOG_LEVEL: info
     ports:

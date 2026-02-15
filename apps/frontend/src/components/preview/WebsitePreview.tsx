@@ -1,24 +1,29 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { 
-  Smartphone, 
-  Monitor, 
-  RefreshCw, 
+import {
+  Smartphone,
+  Monitor,
+  RefreshCw,
   ExternalLink,
   Loader2,
-  Globe
+  Globe,
+  Sparkles
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { Website } from '@/types'
 
 interface WebsitePreviewProps {
   website?: Website | null
+  isGenerating?: boolean
+  workflowStep?: string
 }
 
-export function WebsitePreview({ website }: WebsitePreviewProps) {
+export function WebsitePreview({ website, isGenerating, workflowStep }: WebsitePreviewProps) {
   const [device, setDevice] = useState<'mobile' | 'desktop'>('desktop')
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [key, setKey] = useState(0)
+
+  const showGeneratingState = isGenerating || (!website && workflowStep !== 'initial')
 
   const handleRefresh = () => {
     setIsRefreshing(true)
@@ -99,27 +104,77 @@ export function WebsitePreview({ website }: WebsitePreviewProps) {
                 sandbox="allow-scripts allow-same-origin"
               />
             </motion.div>
+          ) : showGeneratingState ? (
+            <div className="text-center">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary/20 to-cta/20 flex items-center justify-center"
+              >
+                <div className="relative">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                    className="absolute inset-0"
+                  >
+                    <Sparkles className="w-10 h-10 text-primary/50" />
+                  </motion.div>
+                  <Loader2 className="w-10 h-10 text-primary animate-spin relative z-10" />
+                </div>
+              </motion.div>
+
+              <motion.h3
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-lg font-semibold text-slate-700 mb-2"
+              >
+                {isGenerating ? 'Membuat Website Anda...' : 'Mengumpulkan Informasi...'}
+              </motion.h3>
+
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-slate-500 max-w-xs mx-auto"
+              >
+                {isGenerating
+                  ? 'AI sedang mendesain dan membangun website berdasarkan informasi yang Anda berikan. Mohon tunggu sebentar.'
+                  : 'Jawab pertanyaan dari AI untuk membantu kami memahami kebutuhan website Anda.'}
+              </motion.p>
+
+              {isGenerating && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="mt-6 flex justify-center gap-2"
+                >
+                  {['Hero', 'About', 'Services', 'Contact'].map((section, i) => (
+                    <motion.div
+                      key={section}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5 + i * 0.2 }}
+                      className="px-3 py-1.5 bg-primary/10 text-primary text-xs rounded-full"
+                    >
+                      {section}
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
+            </div>
           ) : (
             <div className="text-center">
               <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-slate-200 flex items-center justify-center">
-                {website?.status === 'building' ? (
-                  <Loader2 className="w-10 h-10 text-primary animate-spin" />
-                ) : (
-                  <Globe className="w-10 h-10 text-slate-400" />
-                )}
+                <Globe className="w-10 h-10 text-slate-400" />
               </div>
-              
+
               <p className="text-slate-500">
-                {website?.status === 'building'
-                  ? 'Building your website...'
-                  : 'No preview available'}
+                Preview akan muncul di sini
               </p>
-              
-              {website?.status === 'building' && (
-                <p className="text-sm text-slate-400 mt-2">
-                  This may take a minute
-                </p>
-              )}
+              <p className="text-sm text-slate-400 mt-2">
+                Mulai chat untuk membuat website
+              </p>
             </div>
           )}
         </div>

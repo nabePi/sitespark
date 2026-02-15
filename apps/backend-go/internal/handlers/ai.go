@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 )
 
 type AIHandler struct {
@@ -70,6 +71,7 @@ func (h *AIHandler) Generate(c *gin.Context) {
 	})
 
 	if err != nil {
+		logrus.WithError(err).Error("Website generation failed")
 		if err.Error() == "insufficient tokens" || strings.Contains(err.Error(), "insufficient") {
 			utils.InsufficientTokens(c)
 			return

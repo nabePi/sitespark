@@ -3,6 +3,7 @@ package config
 import (
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
 
@@ -47,6 +48,13 @@ type KimiConfig struct {
 }
 
 func Load() (*Config, error) {
+	// Load .env file from multiple possible locations
+	// Try current directory first, then the app directory
+	_ = godotenv.Load(".env")
+	_ = godotenv.Load("./.env")
+	_ = godotenv.Load("../.env")
+	_ = godotenv.Load("/app/.env")
+
 	viper.SetDefault("SERVER_PORT", "3001")
 	viper.SetDefault("SERVER_ENV", "development")
 	viper.SetDefault("SERVER_ALLOW_ORIGINS", "*")
@@ -67,7 +75,7 @@ func Load() (*Config, error) {
 	viper.SetDefault("JWT_EXPIRES_IN", "24h")
 
 	viper.SetDefault("KIMI_API_KEY", "")
-	viper.SetDefault("KIMI_BASE_URL", "https://api.kimi.com/coding")
+	viper.SetDefault("KIMI_BASE_URL", "https://api.openai.com/v1")
 
 	viper.AutomaticEnv()
 

@@ -100,6 +100,9 @@ func main() {
 		})
 	})
 
+	// Public preview endpoint (no auth required for preview)
+	r.GET("/preview/:id", websiteHandler.Preview)
+
 	// API routes
 	api := r.Group("/api")
 	{

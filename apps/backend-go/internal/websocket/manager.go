@@ -271,21 +271,19 @@ func (m *Manager) WritePump(client *Client) {
 				return
 			}
 
-			w, err := client.Conn.NextWriter(websocket.TextMessage)
-			if err != nil {
+			// Send each message individually - don't batch them
+			if err := client.Conn.WriteMessage(websocket.TextMessage, message); err != nil {
 				return
 			}
-			w.Write(message)
 
-			// Add queued messages to the current WebSocket message
+			// Process any additional queued messages
 			n := len(client.Send)
 			for i := 0; i < n; i++ {
-				w.Write([]byte{'\n'})
-				w.Write(<-client.Send)
-			}
-
-			if err := w.Close(); err != nil {
-				return
+				client.Conn.SetWriteDeadline(time.Now().Add(10 * time.Second))
+				msg := <-client.Send
+				if err := client.Conn.WriteMessage(websocket.TextMessage, msg); err != nil {
+					return
+				}
 			}
 
 		case <-ticker.C:

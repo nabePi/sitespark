@@ -29,7 +29,7 @@ type Website struct {
 	UserID           uuid.UUID      `gorm:"not null" json:"userId"`
 	User             User           `json:"user,omitempty"`
 	Subdomain        string         `gorm:"uniqueIndex;not null" json:"subdomain" validate:"required"`
-	CustomDomain     string         `gorm:"uniqueIndex" json:"customDomain"`
+	CustomDomain     *string        `gorm:"uniqueIndex" json:"customDomain"`
 	Title            string         `json:"title"`
 	Description      string         `json:"description"`
 	TemplateID       string         `json:"templateId"`

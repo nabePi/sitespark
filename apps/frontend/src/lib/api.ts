@@ -111,9 +111,20 @@ export const blogApi = {
 export const formApi = {
   list: (websiteId: string) => api.get<import('@/types').Form[]>(`/websites/${websiteId}/forms`),
   get: (id: string) => api.get<import('@/types').Form>(`/forms/${id}`),
-  create: (websiteId: string, data: Partial<import('@/types').Form>) => 
+  create: (websiteId: string, data: Partial<import('@/types').Form>) =>
     api.post<import('@/types').Form>(`/websites/${websiteId}/forms`, data),
   update: (id: string, data: Partial<import('@/types').Form>) => api.put<import('@/types').Form>(`/forms/${id}`, data),
   delete: (id: string) => api.delete(`/forms/${id}`),
   getSubmissions: (id: string) => api.get<import('@/types').FormSubmission[]>(`/forms/${id}/submissions`),
+}
+
+export const aiApi = {
+  generate: (prompt: string, templateId: string, subdomain: string) =>
+    api.post<{ website: import('@/types').Website; tokensUsed: number }>('/ai/generate', {
+      prompt,
+      templateId,
+      subdomain,
+    }),
+  chat: (messages: { role: string; content: string }[]) =>
+    api.post<{ message: string }>('/ai/chat', { messages }),
 }

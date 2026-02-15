@@ -5,9 +5,11 @@ import { ChatInterface } from '@/components/chat/ChatInterface'
 import { WebsitePreview } from '@/components/preview/WebsitePreview'
 import { AutoDeploy } from '@/components/deploy/AutoDeploy'
 import { useWebsiteStore } from '@/stores/website.store'
+import { useChatStore } from '@/stores/chat.store'
 
 export function ChatPage() {
   const { currentWebsite, setCurrentWebsite } = useWebsiteStore()
+  const { workflow, isGenerating } = useChatStore()
 
   useEffect(() => {
     // Reset current website when entering chat page for new website
@@ -24,7 +26,7 @@ export function ChatPage() {
           AI Website Builder
         </h1>
         <p className="text-slate-600">
-          Describe your dream website and watch it come to life
+          Chat dengan AI untuk membuat website impian Anda
         </p>
       </div>
 
@@ -35,7 +37,7 @@ export function ChatPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <AutoDeploy 
+          <AutoDeploy
             websiteId={currentWebsite.id}
             websiteName={currentWebsite.name || 'My Website'}
             onDeploy={(url) => {
@@ -60,9 +62,12 @@ export function ChatPage() {
           animate={{ opacity: 1, x: 0 }}
           className="glass-card h-full hidden lg:block"
         >
-          <WebsitePreview website={currentWebsite} />
+          <WebsitePreview
+            website={currentWebsite}
+            isGenerating={isGenerating}
+            workflowStep={workflow.step}
+          />
         </motion.div>
       </div>
     </div>
-  )
-}
+  )}

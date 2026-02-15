@@ -18,12 +18,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function DashboardPage() {
   const { user } = useAuth()
-  const { websites, fetchWebsites } = useWebsites()
+  const { websites } = useWebsites()
   const { balance, fetchBalance } = useTokenStore()
 
   useEffect(() => {
     fetchBalance()
-    fetchWebsites()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
