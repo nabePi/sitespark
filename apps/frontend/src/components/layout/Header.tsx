@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Coins,
   Bell,
-  Search,
   LogOut,
   User,
   Settings,
@@ -27,17 +26,7 @@ export function Header() {
     .toUpperCase() || 'U'
 
   return (
-    <header className="h-16 glass border-b border-white/20 flex items-center justify-between px-6">
-      <div className="flex items-center gap-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="pl-10 pr-4 py-2 w-64 rounded-xl border border-slate-200/50 bg-white/50 focus:bg-white focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
-          />
-        </div>
-      </div>
+    <header className="h-16 glass border-b border-white/20 flex items-center justify-end px-6">
 
       <div className="flex items-center gap-4">
         <Link to="/tokens">
