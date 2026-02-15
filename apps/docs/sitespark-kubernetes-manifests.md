@@ -1,8 +1,16 @@
+> 🔮 **STATUS: PLANNED / FUTURE**
+>
+> This document describes **future** Kubernetes deployment architecture. Current deployment uses Docker Compose for local development.
+>
+> Target: Production K8s deployment with Cloudflare CDN.
+
+---
+
 # Kubernetes Deployment Manifests: sitespark
 ## Production-Ready K8s Configuration
 
-**Versi:** 1.0  
-**Platform:** AWS EKS / GCP GKE / Azure AKS  
+**Versi:** 1.0
+**Platform:** AWS EKS / GCP GKE / Azure AKS
 **Tools:** kubectl, helm, terraform  
 
 ---

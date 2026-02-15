@@ -1,8 +1,16 @@
+> 📊 **STATUS: PROJECTED COSTS**
+>
+> This document contains **projected/estimated** costs for the planned multi-stage AI pipeline. Actual current costs may differ as the system currently uses single-stage generation.
+>
+> See `PROJECT_ANALYSIS.md` Section 7.4 for cost breakdown.
+
+---
+
 # AI Token Cost Analysis: sitespark
 ## Perbandingan Biaya LLM untuk Website Generation
 
-**Tanggal Analisis:** 9 Februari 2026  
-**Scope:** Cost comparison untuk 3 model utama (Claude, Gemini, Kimi)  
+**Tanggal Analisis:** 9 Februari 2026
+**Scope:** Cost comparison untuk 3 model utama (Claude, Gemini, Kimi)
 **Use Case:** sitespark AI-to-Landing Page generation
 
 ---

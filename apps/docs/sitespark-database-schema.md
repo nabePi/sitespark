@@ -1,8 +1,16 @@
+> ⚠️ **STATUS: PARTIALLY IMPLEMENTED**
+>
+> This document describes the **planned** complete database schema. Currently, only 4 core tables are implemented: `users`, `websites`, `token_transactions`, and `chat_messages`.
+>
+> See `PROJECT_ANALYSIS.md` Section 5 for current implementation status.
+
+---
+
 # Database Schema Lengkap: sitespark
 ## PostgreSQL Schema untuk AI Website Builder Platform
 
-**Versi:** 1.0  
-**Database:** PostgreSQL 15+  
+**Versi:** 1.0
+**Database:** PostgreSQL 15+
 **Extensions:** uuid-ossp, pg_trgm, postgis (optional)  
 
 ---

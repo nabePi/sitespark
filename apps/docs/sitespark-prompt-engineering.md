@@ -1,8 +1,16 @@
+> 🔮 **STATUS: PLANNED / PHASE 2**
+>
+> This document describes the **future** multi-stage AI pipeline with prompt version control and A/B testing. Currently, the system uses single-stage generation.
+>
+> See `PROJECT_ANALYSIS.md` Section 7 for current vs planned AI architecture.
+
+---
+
 # Prompt Engineering Techniques: sitespark
 ## Advanced Prompt Engineering untuk AI Website Generation
 
-**Versi:** 1.0  
-**Models:** GPT-4, Claude 3.5 Sonnet, Gemini 1.5 Pro  
+**Versi:** 1.0
+**Models:** GPT-4, Claude 3.5 Sonnet, Gemini 1.5 Pro
 **Use Case:** AI-to-Landing Page Generation  
 
 ---

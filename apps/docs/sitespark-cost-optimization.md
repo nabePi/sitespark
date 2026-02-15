@@ -1,8 +1,16 @@
+> 🔮 **STATUS: FUTURE OPTIMIZATIONS**
+>
+> This document describes **planned** cost optimization strategies for future scaling. Current implementation uses basic Docker Compose setup.
+>
+> These optimizations become relevant at 1,000+ websites/month scale.
+
+---
+
 # Cost Optimization Strategies: sitespark
 ## Comprehensive Cost Reduction untuk AI Website Builder Platform
 
-**Versi:** 1.0  
-**Scope:** Infrastructure, AI APIs, Database, CDN  
+**Versi:** 1.0
+**Scope:** Infrastructure, AI APIs, Database, CDN
 **Target:** 50-80% cost reduction  
 
 ---
