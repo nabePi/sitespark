@@ -9,9 +9,10 @@ AI-powered website builder that creates professional landing pages in 1 minute.
 - 🤖 **AI Chat-to-Website** - Build websites via natural language chat
 - ⚡ **1 Minute Generation** - Lightning fast website creation
 - 💰 **Token Economy** - Pay-as-you-go pricing model
-- 📝 **Headless CMS** - Blog and content management
-- 📊 **Form Builder** - Collect leads and data
+- 📊 **Form Builder** - Collect leads and data (UI only, backend planned)
 - 🎨 **Glassmorphism Design** - Modern, beautiful UI
+- 🔒 **JWT Authentication** - Secure user sessions
+- 🌐 **Real-time Chat** - WebSocket-powered AI streaming
 
 ## 🏗️ Tech Stack
 
@@ -67,14 +68,14 @@ npm run dev
 ```
 
 **Access:**
-- Frontend: http://localhost:3000
+- Frontend: http://localhost:3002
 - API: http://localhost:3001
 
 ## 📝 Environment Variables
 
 ### Backend (.env)
 ```env
-SERVER_PORT=3000
+SERVER_PORT=3001
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=sitespark
@@ -155,8 +156,9 @@ See [DOKPLOY_DEPLOY.md](DOKPLOY_DEPLOY.md) for detailed instructions.
 
 ## 📄 Documentation
 
-- [Architecture Decision Records](apps/docs/adr/)
-- [Database Schema](apps/docs/tapsite-database-schema.md)
+- [PROJECT_ANALYSIS.md](PROJECT_ANALYSIS.md) - Comprehensive technical documentation (source of truth)
+- [Database Schema](apps/docs/sitespark-database-schema.md) - Planned complete schema
+- [Backend Rebuild Notes](apps/docs/BACKEND_REBUILD_GO.md) - Go migration history
 - [API Documentation](apps/backend-go/README.md)
 - [Deployment Guide](DOKPLOY_DEPLOY.md)
 
