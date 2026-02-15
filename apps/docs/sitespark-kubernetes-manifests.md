@@ -1,4 +1,4 @@
-# Kubernetes Deployment Manifests: Tapsite.ai
+# Kubernetes Deployment Manifests: sitespark
 ## Production-Ready K8s Configuration
 
 **Versi:** 1.0  
@@ -65,9 +65,9 @@ data:
   ENABLE_ANALYTICS: "true"
   
   # URLs
-  API_BASE_URL: "https://api.tapsite.ai"
-  FRONTEND_URL: "https://tapsite.ai"
-  CDN_BASE_URL: "https://cdn.tapsite.ai"
+  API_BASE_URL: "https://api.sitespark"
+  FRONTEND_URL: "https://sitespark"
+  CDN_BASE_URL: "https://cdn.sitespark"
   
   # Token Economy
   SIGNUP_TOKEN_BONUS: "50000"
@@ -775,18 +775,18 @@ metadata:
     nginx.ingress.kubernetes.io/rate-limit: "100"
     nginx.ingress.kubernetes.io/rate-limit-window: "1m"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "https://tapsite.ai, https://*.tapsite.ai"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://sitespark, https://*.sitespark"
     nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
     nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
 spec:
   tls:
   - hosts:
-    - tapsite.ai
-    - www.tapsite.ai
-    - api.tapsite.ai
+    - sitespark
+    - www.sitespark
+    - api.sitespark
     secretName: tapsite-tls
   rules:
-  - host: tapsite.ai
+  - host: sitespark
     http:
       paths:
       - path: /
@@ -796,7 +796,7 @@ spec:
             name: tapsite-frontend
             port:
               number: 80
-  - host: www.tapsite.ai
+  - host: www.sitespark
     http:
       paths:
       - path: /
@@ -806,7 +806,7 @@ spec:
             name: tapsite-frontend
             port:
               number: 80
-  - host: api.tapsite.ai
+  - host: api.sitespark
     http:
       paths:
       - path: /ai
@@ -842,10 +842,10 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-  - tapsite.ai
-  - www.tapsite.ai
-  - api.tapsite.ai
-  - *.tapsite.ai
+  - sitespark
+  - www.sitespark
+  - api.sitespark
+  - *.sitespark
 ```
 
 ---

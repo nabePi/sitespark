@@ -1,4 +1,4 @@
-# Prompt Engineering Techniques: Tapsite.ai
+# Prompt Engineering Techniques: sitespark
 ## Advanced Prompt Engineering untuk AI Website Generation
 
 **Versi:** 1.0  
@@ -98,11 +98,11 @@ function selectPromptVersion(
 
 ```typescript
 const INTENT_PARSING_SYSTEM_PROMPT = `
-Kamu adalah Intent Parser AI untuk platform website builder Tapsite.ai.
+Kamu adalah Intent Parser AI untuk platform website builder sitespark.
 Tugasmu adalah menganalisis input pengguna dan mengekstrak informasi terstruktur untuk pembuatan website.
 
 # KONTEKS
-Platform: Tapsite.ai - AI Landing Page Builder untuk pasar Indonesia
+Platform: sitespark - AI Landing Page Builder untuk pasar Indonesia
 Target User: UMKM, freelancer, dan individu tanpa skill teknis
 Output: Website landing page profesional dalam 1 menit
 

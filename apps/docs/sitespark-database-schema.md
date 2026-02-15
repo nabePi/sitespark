@@ -1,4 +1,4 @@
-# Database Schema Lengkap: Tapsite.ai
+# Database Schema Lengkap: sitespark
 ## PostgreSQL Schema untuk AI Website Builder Platform
 
 **Versi:** 1.0  

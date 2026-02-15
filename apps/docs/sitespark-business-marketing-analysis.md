@@ -1,4 +1,4 @@
-# Analisis Bisnis & Marketing: Tapsite.ai
+# Analisis Bisnis & Marketing: sitespark
 ## Deep-Dive Analysis menggunakan Product Marketing Frameworks
 
 **Tanggal Analisis:** 9 Februari 2026  
@@ -9,7 +9,7 @@
 
 ## 1. EXECUTIVE SUMMARY
 
-**Tapsite.ai** adalah platform **AI Landing Page Builder pertama di Indonesia** yang memungkinkan pengguna membuat website profesional hanya melalui chat interface, langsung dari HP, dalam waktu kurang dari 1 menit. Dengan menggabungkan AI generation, headless blog system, dan mobile-first approach, Tapsite menargetkan UMKM dan individu yang ingin membangun online presence tanpa skill teknis.
+**sitespark** adalah platform **AI Landing Page Builder pertama di Indonesia** yang memungkinkan pengguna membuat website profesional hanya melalui chat interface, langsung dari HP, dalam waktu kurang dari 1 menit. Dengan menggabungkan AI generation, headless blog system, dan mobile-first approach, Tapsite menargetkan UMKM dan individu yang ingin membangun online presence tanpa skill teknis.
 
 ### Key Business Metrics
 | Metric | Value | Assessment |
@@ -40,7 +40,7 @@
 
 ### 2.2 Unique Attributes
 
-| Attribute | Tapsite.ai | Competitors |
+| Attribute | sitespark | Competitors |
 |-----------|------------|-------------|
 | **Chat Interface** | Natural language website building | Drag-drop atau template-based |
 | **Mobile-First** | 100% functional dari HP | Desktop-optimized, mobile-adapted |
@@ -638,7 +638,7 @@ Tertiary: Storage + advanced features
 **Assessment:** ✅ Kuat, memorable, benefit-driven
 
 **Recommended Enhancement:**
-> "Tapsite.ai - Buat website profesional hanya dengan chat, langsung dari HP, 
+> "sitespark - Buat website profesional hanya dengan chat, langsung dari HP, 
 > dalam 1 menit. AI yang kerjakan, Anda tinggal ceritakan apa yang Anda mau."
 
 ### 7.2 Messaging Hierarchy
@@ -842,9 +842,9 @@ LEVEL 4: Proof Points
 
 ---
 
-## 11. COMPARISON: TAPSITE.AI VS DRIPFORM.ID
+## 11. COMPARISON: sitespark VS DRIPFORM.ID
 
-| Dimension | Tapsite.ai | Dripform.id |
+| Dimension | sitespark | Dripform.id |
 |-----------|------------|-------------|
 | **Core Product** | AI Landing Page Builder | Form Builder + Marketing Automation |
 | **Primary Use Case** | Website creation | Lead capture + follow-up |
@@ -866,7 +866,7 @@ LEVEL 4: Proof Points
 
 ## 12. CONCLUSION
 
-**Tapsite.ai** adalah platform yang sangat solid dengan **first-mover advantage** yang kuat di pasar AI website builder Indonesia. Kombinasi chat interface, mobile-first approach, dan token system menciptakan value proposition yang jelas dan differentiated.
+**sitespark** adalah platform yang sangat solid dengan **first-mover advantage** yang kuat di pasar AI website builder Indonesia. Kombinasi chat interface, mobile-first approach, dan token system menciptakan value proposition yang jelas dan differentiated.
 
 **Key Success Factors:**
 1. ✅ **Clear messaging** - "1 menit" memorable dan powerful
@@ -894,7 +894,7 @@ LEVEL 4: Proof Points
 3. Invest in content marketing (YouTube, TikTok)
 4. Scale affiliate program dengan training
 
-**Dengan perbaikan di pricing transparency dan content marketing, Tapsite.ai berpotensi menjadi dominant player di AI website builder untuk pasar Indonesia dan potentially expand ke SEA.**
+**Dengan perbaikan di pricing transparency dan content marketing, sitespark berpotensi menjadi dominant player di AI website builder untuk pasar Indonesia dan potentially expand ke SEA.**
 
 ---
 

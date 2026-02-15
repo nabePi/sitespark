@@ -1,4 +1,4 @@
-# Tapsite.ai Clone - Implementation Plan
+# sitespark Clone - Implementation Plan
 
 > **Project**: AI-Powered Website Builder SaaS  
 > **Stack**: Node.js/Express + TypeScript | React + Vite + Tailwind CSS | PostgreSQL + Prisma  
@@ -1567,7 +1567,7 @@ S3_ENDPOINT= # For MinIO
 # Email (SendGrid/AWS SES)
 EMAIL_PROVIDER=sendgrid
 EMAIL_API_KEY=...
-EMAIL_FROM=noreply@tapsite.ai
+EMAIL_FROM=noreply@sitespark
 
 # Frontend
 FRONTEND_URL=http://localhost:5173

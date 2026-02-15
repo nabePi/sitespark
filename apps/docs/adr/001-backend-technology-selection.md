@@ -1,5 +1,5 @@
 # Architecture Decision Record (ADR): Backend Technology Selection
-## Tapsite.ai Clone - AI Website Builder Platform
+## sitespark Clone - AI Website Builder Platform
 
 **Status:** Proposed  
 **Date:** 2026-02-09  
@@ -11,7 +11,7 @@
 ## 1. CONTEXT
 
 ### 1.1 Problem Statement
-Memilih backend technology untuk Tapsite.ai clone - platform AI-powered website builder dengan requirements:
+Memilih backend technology untuk sitespark clone - platform AI-powered website builder dengan requirements:
 - AI chat-to-website generation (Kimi K2.5 API)
 - Real-time chat interface (WebSocket)
 - Token economy system

@@ -1,4 +1,4 @@
-# Engineering Deep-Dive: Tapsite.ai AI-to-Landing Page System
+# Engineering Deep-Dive: sitespark AI-to-Landing Page System
 ## Arsitektur Teknis Level Production
 
 **Tanggal Analisis:** 9 Februari 2026  
@@ -233,7 +233,7 @@ User Input
 │ ─────────────────────────────────────────────────────────────────────────│
 │                                                                          │
 │ 1. Upload ke Cloudflare R2 (object storage)                              │
-│ 2. Configure subdomain (user.tapsite.ai)                                 │
+│ 2. Configure subdomain (user.sitespark)                                 │
 │ 3. Set DNS records (automated via Cloudflare API)                        │
 │ 4. Purge CDN cache                                                        │
 │ 5. Generate preview link                                                 │
@@ -525,7 +525,7 @@ CREATE TABLE users (
 CREATE TABLE websites (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  subdomain VARCHAR(100) UNIQUE NOT NULL,  -- user.tapsite.ai
+  subdomain VARCHAR(100) UNIQUE NOT NULL,  -- user.sitespark
   custom_domain VARCHAR(255),  -- Optional: www.user.com
   title VARCHAR(200),
   description TEXT,
@@ -672,7 +672,7 @@ Website Config (JSONB in DB)
 │ ────────────────────────────────────────────────────────────────────────│
 │                                                                          │
 │ 1. Upload ke Cloudflare R2 (S3-compatible)                              │
-│    └── Bucket: websites/tapsite.ai/{subdomain}/                         │
+│    └── Bucket: websites/sitespark/{subdomain}/                         │
 │                                                                          │
 │ 2. Set object metadata                                                  │
 │    ├── Content-Type: text/html, image/webp, etc.                        │
@@ -680,14 +680,14 @@ Website Config (JSONB in DB)
 │    └── Custom metadata: website_id, version                             │
 │                                                                          │
 │ 3. Configure Cloudflare DNS                                             │
-│    └── A record: subdomain.tapsite.ai → Cloudflare Pages                │
+│    └── A record: subdomain.sitespark → Cloudflare Pages                │
 │                                                                          │
 │ 4. Purge CDN cache                                                      │
 │    └── API call ke Cloudflare untuk invalidate cache                    │
 └──────────────────────────────────────────────────────────────────────────┘
     │
     ▼
-Live Website: https://user.tapsite.ai
+Live Website: https://user.sitespark
 ```
 
 ### 5.2 Infrastructure as Code (Terraform)
@@ -698,7 +698,7 @@ Live Website: https://user.tapsite.ai
 # Cloudflare DNS
 resource "cloudflare_record" "website_subdomain" {
   zone_id = var.cloudflare_zone_id
-  name    = "${var.subdomain}.tapsite.ai"
+  name    = "${var.subdomain}.sitespark"
   type    = "CNAME"
   value   = "cname.cloudflare-dns.com"
   proxied = true
@@ -1040,7 +1040,7 @@ Monthly active generation: ~500-1000
 
 ## 10. CONCLUSION
 
-Tapsite.ai menggunakan arsitektur **modern, scalable, dan cost-efficient** untuk AI-to-landing-page generation:
+sitespark menggunakan arsitektur **modern, scalable, dan cost-efficient** untuk AI-to-landing-page generation:
 
 ### Key Engineering Strengths:
 1. **Multi-stage AI pipeline** dengan fallback mechanisms

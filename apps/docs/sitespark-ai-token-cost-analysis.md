@@ -1,9 +1,9 @@
-# AI Token Cost Analysis: Tapsite.ai
+# AI Token Cost Analysis: sitespark
 ## Perbandingan Biaya LLM untuk Website Generation
 
 **Tanggal Analisis:** 9 Februari 2026  
 **Scope:** Cost comparison untuk 3 model utama (Claude, Gemini, Kimi)  
-**Use Case:** Tapsite.ai AI-to-Landing Page generation
+**Use Case:** sitespark AI-to-Landing Page generation
 
 ---
 
@@ -360,7 +360,7 @@ async function generateWithFallback(
 
 ## 7. IMPLEMENTATION RECOMMENDATIONS
 
-### 7.1 Recommended Setup for Tapsite.ai
+### 7.1 Recommended Setup for sitespark
 
 ```typescript
 // config/ai-models.ts
@@ -462,7 +462,7 @@ const ALERTS = {
 
 ### 8.2 Final Recommendation
 
-**Hybrid Architecture untuk Tapsite.ai:**
+**Hybrid Architecture untuk sitespark:**
 
 ```
 ┌─────────────────────────────────────────────────────────────┐

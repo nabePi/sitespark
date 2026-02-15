@@ -1,14 +1,14 @@
-# Comprehensive Website Analysis: tapsite.ai
+# Comprehensive Website Analysis: sitespark
 
 **Analysis Date:** February 9, 2026  
 **Analyst:** OpenClaw AI Subagent  
-**URL:** https://tapsite.ai/
+**URL:** https://sitespark/
 
 ---
 
 ## Executive Summary
 
-**tapsite.ai** adalah platform AI Landing Page Builder pertama di Indonesia yang memungkinkan pengguna membuat website profesional hanya melalui chat interface, langsung dari HP, dalam waktu kurang dari 1 menit. Platform ini menargetkan UMKM, freelancer, penyelenggara event, dan individu yang ingin membangun presence online tanpa skill coding atau desain.
+**sitespark** adalah platform AI Landing Page Builder pertama di Indonesia yang memungkinkan pengguna membuat website profesional hanya melalui chat interface, langsung dari HP, dalam waktu kurang dari 1 menit. Platform ini menargetkan UMKM, freelancer, penyelenggara event, dan individu yang ingin membangun presence online tanpa skill coding atau desain.
 
 ### Key Highlights:
 - **5,830+** website telah dibuat
@@ -23,24 +23,24 @@
 ### Main Pages (Public)
 | URL | Title | Priority | Status |
 |-----|-------|----------|--------|
-| `/` | tapsite.ai \| AI Landing Page Builder | 1.0 | ✅ Active - Homepage utama |
-| `/blog` | tapsite.ai \| AI Landing Page Builder | 0.8 | ✅ Active - Blog system info |
-| `/faq` | FAQ - tapsite.ai | 0.8 | ✅ Active - FAQ page |
-| `/affiliate` | tapsite.ai \| AI Landing Page Builder | 0.8 | ✅ Active - Program affiliate |
-| `/pricing` | tapsite.ai \| Mobile First AI Landing Page Builder | 0.9 | ⚠️ Minimal content (SPA likely) |
-| `/try` | tapsite.ai \| Mobile First AI Landing Page Builder | 0.8 | ⚠️ Minimal content (redirect to app) |
+| `/` | sitespark \| AI Landing Page Builder | 1.0 | ✅ Active - Homepage utama |
+| `/blog` | sitespark \| AI Landing Page Builder | 0.8 | ✅ Active - Blog system info |
+| `/faq` | FAQ - sitespark | 0.8 | ✅ Active - FAQ page |
+| `/affiliate` | sitespark \| AI Landing Page Builder | 0.8 | ✅ Active - Program affiliate |
+| `/pricing` | sitespark \| Mobile First AI Landing Page Builder | 0.9 | ⚠️ Minimal content (SPA likely) |
+| `/try` | sitespark \| Mobile First AI Landing Page Builder | 0.8 | ⚠️ Minimal content (redirect to app) |
 | `/webinar` | (JSON response) | 0.9 | ⚠️ API endpoint/empty |
 
 ### Auth Pages
 | URL | Title | Status |
 |-----|-------|--------|
-| `/login` | tapsite.ai \| Mobile First AI Landing Page Builder | ⚠️ Minimal (SPA) |
-| `/register` | tapsite.ai \| Mobile First AI Landing Page Builder | ⚠️ Minimal (SPA) |
+| `/login` | sitespark \| Mobile First AI Landing Page Builder | ⚠️ Minimal (SPA) |
+| `/register` | sitespark \| Mobile First AI Landing Page Builder | ⚠️ Minimal (SPA) |
 
 ### Navigation Structure
 ```
 [NAVBAR - Main]
-├── Logo (tapsite.ai) → /
+├── Logo (sitespark) → /
 ├── Home → /
 ├── Pricing → /pricing
 ├── Showcases → /showcases (redirects to login)
@@ -53,8 +53,8 @@
 
 [FOOTER - Implied]
 ├── WhatsApp Contact: +62 851-3805-0322
-├── Email: support@tapsite.ai
-└── Support Ticket: support.tapsite.ai
+├── Email: support@sitespark
+└── Support Ticket: support.sitespark
 ```
 
 ### Sitemap Analysis
@@ -67,7 +67,7 @@ Sitemap.xml menunjukkan 8 URL utama dengan prioritas tinggi, namun beberapa hala
 ### 1. Homepage (`/`)
 
 **Meta Information:**
-- **Title:** tapsite.ai \| AI Landing Page Builder
+- **Title:** sitespark \| AI Landing Page Builder
 - **Meta Description:** 🇮🇩 Website Jadi 1 Menit, Langsung dari HP Kamu!
 - **OG Image:** /tapsite-thumb.jpeg
 
@@ -79,10 +79,10 @@ Sitemap.xml menunjukkan 8 URL utama dengan prioritas tinggi, namun beberapa hala
 | **Problem** | "Pusing Mikirin Bikin Website?" | 6 pain points cards: Biaya mahal, proses lama, no coding skill, butuh komputer, bingung mulai, bingung copywriting. |
 | **Why Website** | "Kenapa Sih Kita Butuh Website?" | Embedded YouTube video + 6 value propositions: Jangkauan 24/7, kredibilitas, peluang bisnis, marketing efektif, hemat biaya, data analytics. |
 | **Solution** | "Solusi Cerdas Untukmu" | 3-step process: Chat & Cerita → AI Proses → Website Jadi. |
-| **Features** | "Fitur Unggulan tapsite.ai" | AI Powered, Custom Design, Mobile First. |
-| **Benefits** | "Kenapa tapsite.ai Bikin Hidup Lebih Mudah?" | Value propositions yang di-highlight. |
+| **Features** | "Fitur Unggulan sitespark" | AI Powered, Custom Design, Mobile First. |
+| **Benefits** | "Kenapa sitespark Bikin Hidup Lebih Mudah?" | Value propositions yang di-highlight. |
 | **Target Audience** | "Siapa Aja Sih yang Cocok?" | 6 personas: UMKM, Freelancer, Event Organizer, Personal Branding, Komunitas, Product Launch. |
-| **Social Proof** | "Website Keren by tapsite.ai" | Showcase/gallery section. |
+| **Social Proof** | "Website Keren by sitespark" | Showcase/gallery section. |
 | **Testimonials** | "Dengerin Apa Kata Mereka!" | 6 user testimonials dengan rating 5 bintang. |
 | **FAQ** | "Masih Ada Pertanyaan?" | 5 FAQ items dengan accordion style. |
 | **CTA Final** | "Waktu terbaik adalah SEKARANG" | Dual CTA: Coba Sendiri vs Konsultasi. |
@@ -97,7 +97,7 @@ Sitemap.xml menunjukkan 8 URL utama dengan prioritas tinggi, namun beberapa hala
 ### 2. Blog Page (`/blog`)
 
 **Meta Information:**
-- **Title:** tapsite.ai \| AI Landing Page Builder
+- **Title:** sitespark \| AI Landing Page Builder
 
 **Content Structure:**
 
@@ -135,7 +135,7 @@ Sitemap.xml menunjukkan 8 URL utama dengan prioritas tinggi, namun beberapa hala
 ### 4. Affiliate Page (`/affiliate`)
 
 **Meta Information:**
-- **Title:** tapsite.ai \| AI Landing Page Builder
+- **Title:** sitespark \| AI Landing Page Builder
 
 **Content Structure:**
 
@@ -329,7 +329,7 @@ Sitemap.xml menunjukkan 8 URL utama dengan prioritas tinggi, namun beberapa hala
 
 ### Competitive Landscape
 
-| Competitor | Differentiation vs tapsite.ai |
+| Competitor | Differentiation vs sitespark |
 |------------|------------------------------|
 | Wix/WordPress | tapsite: Lebih cepat, AI-powered, mobile-first |
 | Webflow | tapsite: No learning curve, chat interface |
@@ -559,7 +559,7 @@ Robots.txt secara eksplisit melarang AI training crawlers:
 
 ## Conclusion
 
-tapsite.ai adalah platform yang solid dengan positioning yang jelas sebagai AI Landing Page Builder pertama di Indonesia. Kekuatan utama terletak pada:
+sitespark adalah platform yang solid dengan positioning yang jelas sebagai AI Landing Page Builder pertama di Indonesia. Kekuatan utama terletak pada:
 
 1. **Messaging yang sederhana dan kuat:** "1 menit dari HP"
 2. **Market timing yang tepat:** UMKM digitalization wave
