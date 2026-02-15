@@ -14,10 +14,12 @@
 4. [Backend Deep Dive](#4-backend-deep-dive)
 5. [Database Schema](#5-database-schema)
 6. [API Reference](#6-api-reference)
-7. [Key Features](#7-key-features)
-8. [Code Patterns & Conventions](#8-code-patterns--conventions)
-9. [Environment Configuration](#9-environment-configuration)
-10. [Development Workflow](#10-development-workflow)
+7. [AI System Architecture](#7-ai-system-architecture)
+8. [Key Features](#8-key-features)
+9. [Code Patterns & Conventions](#9-code-patterns--conventions)
+10. [Environment Configuration](#10-environment-configuration)
+11. [Development Workflow](#11-development-workflow)
+12. [Appendix: Current vs Planned](#appendix-current-vs-planned)
 
 ---
 
@@ -712,7 +714,9 @@ const (
 
 ## 5. Database Schema
 
-### 5.1 Entity Relationship Diagram
+### 5.1 Current Implementation
+
+#### Entity Relationship Diagram (Implemented)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -778,7 +782,67 @@ const (
 └──────────────────┴──────────────────────────────────────────────────┘
 ```
 
-### 5.2 Indexes
+### 5.2 Planned Schema Extensions
+
+The following tables are planned for future implementation (see `apps/docs/sitespark-database-schema.md`):
+
+#### Form System
+```sql
+CREATE TABLE form_submissions (
+  id UUID PRIMARY KEY,
+  website_id UUID REFERENCES websites(id),
+  form_data JSONB NOT NULL,
+  ip_address INET,
+  user_agent TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+#### Analytics System
+```sql
+CREATE TABLE website_analytics_daily (
+  id UUID PRIMARY KEY,
+  website_id UUID REFERENCES websites(id),
+  date DATE NOT NULL,
+  page_views INTEGER DEFAULT 0,
+  unique_visitors INTEGER DEFAULT 0,
+  avg_session_duration INTEGER,
+  bounce_rate DECIMAL(5,2)
+);
+
+CREATE TABLE page_views (
+  id UUID PRIMARY KEY,
+  website_id UUID REFERENCES websites(id),
+  page_path VARCHAR(500),
+  referrer VARCHAR(500),
+  country_code CHAR(2),
+  device_type VARCHAR(20),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+#### Token Commerce
+```sql
+CREATE TABLE token_packages (
+  id UUID PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  token_amount INTEGER NOT NULL,
+  price_idr INTEGER NOT NULL,
+  is_promo BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE token_purchases (
+  id UUID PRIMARY KEY,
+  user_id UUID REFERENCES users(id),
+  package_id UUID REFERENCES token_packages(id),
+  amount_paid INTEGER NOT NULL,
+  payment_method VARCHAR(50),
+  payment_status VARCHAR(20),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### 5.3 Indexes
 
 ```sql
 -- User indexes
@@ -938,9 +1002,102 @@ CREATE INDEX idx_chat_messages_website_id ON chat_messages(website_id);
 
 ---
 
-## 7. Key Features
+## 7. AI System Architecture
 
-### 7.1 Authentication Flow
+### 7.1 Current Implementation (Single-Stage)
+
+Currently, the AI system uses a single-stage generation process:
+
+```
+User Prompt → Kimi API → JSON Response → Website Creation
+```
+
+The AI receives a compiled prompt from the 6-step workflow and returns structured JSON content.
+
+### 7.2 Planned Multi-Stage Pipeline
+
+The planned architecture (see `apps/docs/sitespark-engineering-deepdive.md`) implements a sophisticated 6-stage pipeline:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         MULTI-STAGE AI PIPELINE                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐         │
+│  │ Stage 1: Intent │───▶│ Stage 2: Design │───▶│ Stage 3: Content│         │
+│  │   Parsing       │    │   Decision      │    │   Generation    │         │
+│  │                 │    │                 │    │                 │         │
+│  │ • Business type │    │ • Color palette │    │ • Hero section  │         │
+│  │ • Audience      │    │ • Typography    │    │ • Services      │         │
+│  │ • Goals         │    │ • Layout grid   │    │ • About/Contact │         │
+│  │ • Features      │    │ • Spacing scale │    │ • CTA copy      │         │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘         │
+│           │                                              │                   │
+│           │         ┌─────────────────┐    ┌─────────────────┐              │
+│           │         │ Stage 6: Deploy │◀───│ Stage 5: Comp-  │              │
+│           │         │                 │    │    onent        │              │
+│           │         │ • Build static  │    │   Assembly      │              │
+│           │         │ • Optimize      │    │                 │              │
+│           │         │ • Deploy to CDN │    │ • React/HTML    │              │
+│           │         │ • Cache invalid │    │ • Tailwind CSS  │              │
+│           │         │                 │    │ • Responsive    │              │
+│           │         └─────────────────┘    └─────────────────┘              │
+│           │                                              ▲                   │
+│           │         ┌─────────────────┐                   │                   │
+│           └────────▶│ Stage 4: Image  │───────────────────┘                   │
+│                     │   Generation      │                                       │
+│                     │                   │                                       │
+│                     │ • Hero images     │                                       │
+│                     │ • Icons/graphics  │                                       │
+│                     │ • Backgrounds     │                                       │
+│                     │                   │                                       │
+│                     └─────────────────┘                                       │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 7.3 Prompt Version Control System
+
+The planned system includes sophisticated prompt management:
+
+```go
+// models/prompt_version.go
+type PromptVersion struct {
+  ID            uuid.UUID
+  Name          string    // e.g., "v2.1-content-generation"
+  Stage         string    // "intent_parsing", "design_decision", etc.
+  PromptText    string
+  ModelConfig   JSONB     // temperature, max_tokens, etc.
+  SuccessRate   float64   // from A/B testing
+  IsActive      bool
+  CreatedAt     time.Time
+}
+```
+
+**A/B Testing Framework**:
+- Multiple prompt variants per stage
+- Track success rate per version
+- Gradual rollout (10% → 50% → 100%)
+- Automatic rollback on quality degradation
+
+### 7.4 AI Cost Analysis
+
+| Stage | Model | Input Tokens | Output Tokens | Cost (USD) |
+|-------|-------|--------------|---------------|------------|
+| Intent Parsing | GPT-4o-mini | 500 | 200 | $0.0030 |
+| Design Decision | GPT-4o-mini | 400 | 300 | $0.0033 |
+| Content Generation | GPT-4o | 800 | 2,000 | $0.0600 |
+| Image Generation | DALL-E 3 | 1 image | - | $0.0400 |
+| Component Assembly | GPT-4o | 1,000 | 3,000 | $0.0950 |
+| **Total** | - | - | - | **~$0.11** |
+
+**Converted**: ~$0.11 ≈ **Rp 1,800** per website (at Rp 16,500/USD)
+
+---
+
+## 8. Key Features
+
+### 8.1 Authentication Flow
 
 ```
 1. User submits login credentials
@@ -952,7 +1109,7 @@ CREATE INDEX idx_chat_messages_website_id ON chat_messages(website_id);
 7. On 401 error → redirect to login
 ```
 
-### 7.2 Token Economy
+### 8.2 Token Economy
 
 | Action | Token Change | Description |
 |--------|--------------|-------------|
@@ -966,7 +1123,7 @@ CREATE INDEX idx_chat_messages_website_id ON chat_messages(website_id);
 - Transaction table for audit trail
 - Balance checked before any deduction
 
-### 7.3 Website Generation Workflow
+### 8.3 Website Generation Workflow
 
 ```
 1. User answers 6 questions via chat
@@ -981,7 +1138,7 @@ CREATE INDEX idx_chat_messages_website_id ON chat_messages(website_id);
 10. Frontend shows preview
 ```
 
-### 7.4 Real-time Chat
+### 8.4 Real-time Chat
 
 ```
 1. User connects to WebSocket (/ws)
@@ -993,7 +1150,7 @@ CREATE INDEX idx_chat_messages_website_id ON chat_messages(website_id);
 7. Frontend updates UI chunk by chunk
 ```
 
-### 7.5 Website Preview
+### 8.5 Website Preview
 
 The preview endpoint (`GET /preview/:id`) renders HTML from stored JSON:
 
@@ -1008,9 +1165,9 @@ func (h *WebsiteHandler) Preview(c *gin.Context) {
 
 ---
 
-## 8. Code Patterns & Conventions
+## 9. Code Patterns & Conventions
 
-### 8.1 Frontend Patterns
+### 9.1 Frontend Patterns
 
 **Zustand Store Pattern**:
 ```typescript
@@ -1066,7 +1223,7 @@ export function Component({ prop1, prop2 = 0 }: ComponentProps) {
 }
 ```
 
-### 8.2 Backend Patterns
+### 9.2 Backend Patterns
 
 **Handler Pattern**:
 ```go
@@ -1118,7 +1275,7 @@ func (s *Service) Operation(ctx context.Context) error {
 }
 ```
 
-### 8.3 Naming Conventions
+### 9.3 Naming Conventions
 
 | Type | Convention | Example |
 |------|------------|---------|
@@ -1132,9 +1289,9 @@ func (s *Service) Operation(ctx context.Context) error {
 
 ---
 
-## 9. Environment Configuration
+## 10. Environment Configuration
 
-### 9.1 Backend Environment Variables
+### 10.1 Backend Environment Variables
 
 ```bash
 # Server
@@ -1164,14 +1321,14 @@ KIMI_API_KEY=your-api-key
 KIMI_BASE_URL=https://api.openai.com/v1
 ```
 
-### 9.2 Frontend Environment Variables
+### 10.2 Frontend Environment Variables
 
 ```bash
 VITE_API_URL=http://localhost:3001/api
 VITE_SOCKET_URL=ws://localhost:3001
 ```
 
-### 9.3 Docker Compose Configuration
+### 10.3 Docker Compose Configuration
 
 ```yaml
 services:
@@ -1199,16 +1356,16 @@ services:
       - "3001:3001"
 
   frontend:
-    build: ./apps/frontend
+    build: ./apps/backend-go
     ports:
       - "3002:80"
 ```
 
 ---
 
-## 10. Development Workflow
+## 11. Development Workflow
 
-### 10.1 Local Development
+### 11.1 Local Development
 
 ```bash
 # Start all services
@@ -1222,7 +1379,7 @@ docker-compose logs -f frontend
 docker-compose down
 ```
 
-### 10.2 Frontend Development
+### 11.2 Frontend Development
 
 ```bash
 cd apps/frontend
@@ -1232,7 +1389,7 @@ npm run build      # Production build
 npm run lint       # ESLint
 ```
 
-### 10.3 Backend Development
+### 11.3 Backend Development
 
 ```bash
 cd apps/backend-go
@@ -1242,7 +1399,7 @@ go test ./...             # Run tests
 go build -o main cmd/api/main.go  # Build binary
 ```
 
-### 10.4 Database Migrations
+### 11.4 Database Migrations
 
 GORM auto-migrates on startup:
 ```go
@@ -1255,7 +1412,7 @@ db.AutoMigrate(
 )
 ```
 
-### 10.5 Testing
+### 11.5 Testing
 
 **E2E Tests** (Playwright):
 ```bash
@@ -1266,9 +1423,35 @@ npx playwright test
 
 ---
 
-## Appendix A: File Reference
+## Appendix: Current vs Planned
 
-### A.1 Critical Files
+### A.1 Current Implementation Status
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| User Auth | ✅ Implemented | JWT-based |
+| Token Economy | ✅ Implemented | Basic transactions |
+| Website Generation | ✅ Implemented | Single-stage AI |
+| WebSocket Chat | ✅ Implemented | Real-time streaming |
+| Website Preview | ✅ Implemented | HTML from JSON |
+| Form Builder | 🟡 Partial | UI only, no backend |
+| Template System | 🟡 Partial | template_id field only |
+| Analytics | ❌ Not Implemented | Planned |
+| Image Generation | ❌ Not Implemented | Planned (DALL-E 3) |
+| Multi-stage AI | ❌ Not Implemented | Planned |
+| Kubernetes Deploy | ❌ Not Implemented | Planned |
+
+### A.2 Key Documentation References
+
+| Document | Purpose |
+|----------|---------|
+| `apps/docs/sitespark-database-schema.md` | Complete planned PostgreSQL schema |
+| `apps/docs/sitespark-engineering-deepdive.md` | Production architecture & AI pipeline |
+| `apps/docs/sitespark-prompt-engineering.md` | Prompt version control & A/B testing |
+| `apps/docs/sitespark-kubernetes-manifests.md` | K8s deployment configuration |
+| `apps/docs/BACKEND_REBUILD_GO.md` | Go migration architecture decisions |
+
+### A.3 Critical Files
 
 | Purpose | Path |
 |---------|------|
@@ -1283,20 +1466,9 @@ npx playwright test
 | Token Service | `apps/backend-go/internal/services/token/manager.go` |
 | AI Service | `apps/backend-go/internal/services/ai/kimi.go` |
 
-### A.2 Configuration Files
+### A.4 Common Tasks
 
-| File | Purpose |
-|------|---------|
-| `docker-compose.yml` | Local development orchestration |
-| `apps/frontend/vite.config.ts` | Vite build configuration |
-| `apps/frontend/tailwind.config.js` | Tailwind CSS theme |
-| `apps/backend-go/go.mod` | Go dependencies |
-
----
-
-## Appendix B: Common Tasks
-
-### B.1 Add New API Endpoint
+#### Add New API Endpoint
 
 1. **Backend**:
    - Add handler method in `internal/handlers/`
@@ -1308,13 +1480,13 @@ npx playwright test
    - Add types in `types/index.ts`
    - Create/use hook for data fetching
 
-### B.2 Add New Database Model
+#### Add New Database Model
 
 1. Add struct in `internal/models/models.go`
 2. Auto-migrate in `internal/database/database.go`
 3. Add corresponding TypeScript type in `packages/shared-types/`
 
-### B.3 Add New Page
+#### Add New Page
 
 1. Create page component in `pages/`
 2. Add route in `App.tsx`
